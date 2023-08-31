@@ -1,0 +1,26 @@
+{
+  "scripts": {
+    "dev": "fastly compute serve --watch --watch-dir=./src",
+    "prebuild": "node ./build.mjs",
+    "build": "js-compute-runtime bin/index.js bin/main.wasm",
+    "deploy": "fastly compute publish",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/node": "^20.5.6",
+    "esbuild": "^0.17.12",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@fastly/js-compute": "^2.5.0",
+    "@libsql/client": "^0.3.1",
+    "esbuild-plugin-polyfill-node": "^0.3.0",
+    "fastly": "^6.0.0",
+    "formdata-polyfill": "^4.0.10",
+    "hono": "^3.5.0",
+    "zod": "^3.22.2"
+  },
+  "type": "module"
+}

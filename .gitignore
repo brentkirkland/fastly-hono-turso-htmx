@@ -1,0 +1,6 @@
+bin
+data.sqld
+pkg
+fastly.toml
+.env
+node_modules

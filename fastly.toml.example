@@ -1,0 +1,25 @@
+# This file describes a Fastly Compute@Edge package. To learn more visit:
+# https://developer.fastly.com/reference/fastly-toml/
+
+name = "fastly-hono-turso-htmx"
+authors = ["@brentkirkland"]
+description = "An example app of running a hono, turso, htmx Fastly compute@edge service"
+language = "javascript"
+manifest_version = 2
+service_id = ""
+
+[scripts]
+  build = "node ./build.mjs && js-compute-runtime bin/index.js bin/main.wasm"
+
+[local_server]
+    [local_server.secret_stores]
+        [[local_server.secret_stores.fhth_secrets]]
+          key = "DB_AUTH_TOKEN"
+          data = "<TOKEN_HERE>"
+        [[local_server.secret_stores.fhth_secrets]]
+          key = "DB_URL"
+          data = "<URL_HERE>"
+    [local_server.backends]
+        [local_server.backends.db]
+            url = "libsql://<DB_URL>"
+
