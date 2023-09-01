@@ -4,10 +4,6 @@ import { Hono, MiddlewareHandler } from "hono";
 import { html } from "hono/html";
 import type { Client } from "@libsql/client/web";
 
-// TODO: issue 1: esbuild doesn't like this import below
-// This import is resolved by the /// reference above
-// import { SecretStore } from "fastly:secret-store";
-
 import { BaseHtml } from "./components/layout/base";
 import { Body } from "./components/layout/body";
 import { TodoList } from "./components/todo/todo-list";
@@ -15,6 +11,8 @@ import { TodoItem } from "./components/todo/todo-item";
 import { createDb } from "./db";
 import { formSchema, zTodo, zTodos } from "./zod";
 import { getFormData } from "./utils";
+import { poweredBy } from "hono/powered-by";
+import { logger } from "hono/logger";
 
 declare module "hono" {
   interface ContextVariableMap {
@@ -25,18 +23,13 @@ declare module "hono" {
 const app = new Hono();
 
 const dbMiddleware: MiddlewareHandler = async (c, next) => {
-  // TODO: issue 1: we have to use this workaround for now
-  // @ts-expect-error - still got to figure out esbuild and /// imports
-  const secretStore = new SecretStore("fhth_secrets");
-  const authTokenObj = await secretStore.get("DB_AUTH_TOKEN");
-  const urlObj = await secretStore.get("DB_URL");
+  const configStore = new ConfigStore("fhth_config");
+  const authToken = await configStore.get("DB_AUTH_TOKEN");
+  const url = await configStore.get("DB_URL");
 
-  if (!authTokenObj || !urlObj) {
+  if (!authToken || !url) {
     return c.text("Missing env", 500);
   }
-
-  const authToken = authTokenObj.plaintext();
-  const url = urlObj.plaintext();
 
   c.set(
     "db",
@@ -49,6 +42,17 @@ const dbMiddleware: MiddlewareHandler = async (c, next) => {
   return next();
 };
 
+app.use("*", (c, next) => {
+  // @ts-expect-error
+  const l = new Logger("fhth_logger");
+  l.log(
+    JSON.stringify({
+      a: "b",
+    })
+  );
+  return logger((msg, rest) => l.log(JSON.stringify({ msg, rest })))(c, next);
+});
+app.use("*", poweredBy());
 app.use("*", dbMiddleware);
 
 app.get("/", async (c) => {

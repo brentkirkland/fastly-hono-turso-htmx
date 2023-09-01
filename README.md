@@ -47,3 +47,7 @@ open http://localhost:7676
 ```
 npm run deploy
 ```
+
+### Notes
+
+- Add a backend via fastly cli
