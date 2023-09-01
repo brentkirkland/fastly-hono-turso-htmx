@@ -13,6 +13,7 @@ import { formSchema, zTodo, zTodos } from "./zod";
 import { getFormData } from "./utils";
 import { poweredBy } from "hono/powered-by";
 import { logger } from "hono/logger";
+import { TodoCheckbox } from "./components/todo/todo-checkbox";
 
 declare module "hono" {
   interface ContextVariableMap {
@@ -45,11 +46,6 @@ const dbMiddleware: MiddlewareHandler = async (c, next) => {
 app.use("*", (c, next) => {
   // @ts-expect-error
   const l = new Logger("fhth_logger");
-  l.log(
-    JSON.stringify({
-      a: "b",
-    })
-  );
   return logger((msg, rest) => l.log(JSON.stringify({ msg, rest })))(c, next);
 });
 app.use("*", poweredBy());
@@ -144,7 +140,7 @@ app.post("/todos/toggle/:id", async (c) => {
     return c.text("Invalid data", 406);
   }
 
-  return c.html(<TodoItem {...todo.data} />);
+  return c.html(<TodoCheckbox {...todo.data} />);
 });
 
 app.delete("/todos/:id", async (c) => {
