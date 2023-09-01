@@ -45,7 +45,12 @@ open http://localhost:7676
 ### Deploy to fastly
 
 ```
-npm run deploy
+
+pnpm run deploy --token=TOKEN --service-id=SERVICE_ID
+fastly backend create --name=db --address=DB_URL --service-id=SERVICE_ID --token=TOKEN --version=active --autoclone --port=443
+
+# Listen to logs
+fastly log-tail --service-id=SERVICE_ID --token=TOKEN
 ```
 
 ### Inspired by
