@@ -10,7 +10,7 @@ export function BaseHtml({ children }: { children: Children }) {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>not THE BETH STACK</title>
+        <title>Fastly HTMX</title>
         <script src="https://unpkg.com/htmx.org@1.9.5"></script>
         <script src="https://unpkg.com/hyperscript.org@0.9.11"></script>
         <script src="https://cdn.tailwindcss.com"></script>

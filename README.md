@@ -48,6 +48,10 @@ open http://localhost:7676
 npm run deploy
 ```
 
+### Inspired by
+
+- https://github.com/fvucemilo/beth-stack
+
 ### Notes
 
 - Add a backend via fastly cli
