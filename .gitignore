@@ -4,3 +4,4 @@ pkg
 fastly.toml
 .env
 node_modules
+runbook

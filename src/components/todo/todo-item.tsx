@@ -5,7 +5,10 @@ export function TodoItem(todo: Todo) {
   const { content, id } = todo;
   const i = `todo-${id}`;
   return (
-    <div class="flex flex-row py-3 space-x-8 border-b" id={i}>
+    <div
+      class="flex flex-row py-3 space-x-8 border-b dark:border-b-gray-700"
+      id={i}
+    >
       <p class="flex-1 overflow-hidden min-w-200 text-ellipsis line-clamp-2">
         {content}
       </p>
