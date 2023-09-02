@@ -12,7 +12,6 @@ build({
       }
     }),
   ],
-  // external: ["fastly:secret-store"],
 }).catch((error) => {
   console.error(error)
   process.exit(1)

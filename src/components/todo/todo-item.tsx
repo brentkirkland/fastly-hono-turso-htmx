@@ -5,13 +5,15 @@ export function TodoItem(todo: Todo) {
   const { content, id } = todo;
   const i = `todo-${id}`;
   return (
-    <div class="flex flex-row space-x-8 border-b py-3" id={i}>
-      <p class="flex-1 min-w-200 overflow-hidden text-ellipsis">{content}</p>
-      <div class="flex flex-row items-center space-x-3 px-2">
+    <div class="flex flex-row py-3 space-x-8 border-b" id={i}>
+      <p class="flex-1 overflow-hidden min-w-200 text-ellipsis line-clamp-2">
+        {content}
+      </p>
+      <div class="flex flex-row items-center px-2 space-x-3">
         <TodoCheckbox {...todo} />
         <div class="flex">
           <button
-            class="text-red-500 bg-red-50 p-1 rounded-md text-sm aspect-square font-bold flex items-center justify-center "
+            class="box-content flex items-center justify-center p-0.5 text-sm font-bold text-red-500 rounded-sm bg-red-50 aspect-square dark:bg-red-600 dark:text-red-100 border border-red-800 dark:border-red-300 box-border hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-700 dark:hover:text-red-50"
             hx-delete={`/todos/${id}`}
             hx-swap="outerHTML"
             hx-target={`#${i}`}

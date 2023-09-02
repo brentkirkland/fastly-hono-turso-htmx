@@ -10,12 +10,12 @@ export function TodoForm() {
       <input
         type="text"
         name="content"
-        class="border border-gray-400 w-full rounded-sm p-2"
+        class="w-full p-2 border border-gray-400 rounded-sm dark:bg-gray-800 dark:text-white"
         placeholder="Add a todo"
       />
       <button
         type="submit"
-        class="bg-teal-500 text-white px-6 text-sm font-bold rounded-sm "
+        class="px-6 text-sm font-bold text-white bg-teal-500 rounded-sm dark:bg-teal-600 dark:text-teal-50 hover:bg-teal-600 dark:hover:bg-teal-700"
       >
         Add
       </button>
