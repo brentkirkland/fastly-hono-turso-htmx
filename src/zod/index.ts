@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+export const zCuid = z.string().cuid2();
+
 export const zTodo = z.object({
-  id: z.number(),
+  id: zCuid,
   content: z.string(),
   completed: z.number().min(0).max(1),
 });

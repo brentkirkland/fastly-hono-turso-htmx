@@ -9,15 +9,20 @@ import { Body } from "./components/layout/body";
 import { TodoList } from "./components/todo/todo-list";
 import { TodoItem } from "./components/todo/todo-item";
 import { createDb } from "./db";
-import { formSchema, zTodo, zTodos } from "./zod";
+import { formSchema, zCuid, zTodo, zTodos } from "./zod";
 import { getFormData } from "./utils";
 import { poweredBy } from "hono/powered-by";
 import { logger } from "hono/logger";
 import { TodoCheckbox } from "./components/todo/todo-checkbox";
+import { init } from "@paralleldrive/cuid2";
+import { ConfigStore } from "fastly:config-store";
+import { env } from "fastly:env";
 
+// NOTE: we extend context to hono
 declare module "hono" {
   interface ContextVariableMap {
     db: Client;
+    cuid2: () => string;
   }
 }
 
@@ -43,6 +48,15 @@ const dbMiddleware: MiddlewareHandler = async (c, next) => {
   return next();
 };
 
+const cuidMiddleware: MiddlewareHandler = async (c, next) => {
+  const createdId = init({
+    length: 10,
+    fingerprint: env("FASTLY_POP"),
+  });
+  c.set("cuid2", createdId);
+  return next();
+};
+
 app.use("*", (c, next) => {
   // @ts-expect-error
   const l = new Logger("fhth_logger");
@@ -54,8 +68,8 @@ app.use("*", dbMiddleware);
 app.get("/", async (c) => {
   const db = c.get("db");
   const [, data] = await db.batch([
-    "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, completed INTEGER NOT NULL DEFAULT 0)",
-    "select * from todos",
+    "CREATE TABLE IF NOT EXISTS todosV2 (id TEXT PRIMARY KEY, content TEXT NOT NULL, completed INTEGER NOT NULL DEFAULT 0)",
+    "select * from todosV2",
   ]);
 
   if (!(data && data.rows)) {
@@ -76,8 +90,9 @@ app.get("/", async (c) => {
   );
 });
 
-app.post("/todos", async (c) => {
+app.post("/todos", cuidMiddleware, async (c) => {
   const db = c.get("db");
+  const cuid2 = c.get("cuid2");
   const formData = await getFormData(c.req);
 
   const parsed = formSchema.safeParse({
@@ -87,36 +102,33 @@ app.post("/todos", async (c) => {
     return c.text("Invalid!", 401);
   }
 
-  const res = await db.execute({
-    sql: `INSERT INTO todos (content) VALUES (?)`,
-    args: [parsed.data.content],
+  const id = cuid2();
+  const content = parsed.data.content;
+
+  await db.execute({
+    sql: `INSERT INTO todosV2 (id, content) VALUES (?, ?)`,
+    args: [id, parsed.data.content],
   });
 
-  const todo = zTodo.safeParse({
-    id: Number(res.lastInsertRowid),
-    content: parsed.data.content,
-    completed: 0,
-  });
-  if (!todo.success) {
-    return c.text("Invalid data", 406);
-  }
-
-  return c.html(<TodoItem {...todo.data} />);
+  return c.html(<TodoItem id={id} content={content} completed={0} />);
 });
 
 app.post("/todos/toggle/:id", async (c) => {
   const db = c.get("db");
   const id = c.req.param("id");
-  const numberId = Number(id);
 
-  if (isNaN(numberId)) {
+  const parseCuid = zCuid.safeParse(id);
+
+  if (!parseCuid.success) {
     c.status(400);
     return c.text("Invalid id", 401);
   }
 
+  const cuidId = parseCuid.data;
+
   const oldTodo = await db.execute({
-    sql: `SELECT * FROM todos WHERE id = ?`,
-    args: [numberId],
+    sql: `SELECT * FROM todosV2 WHERE id = ?`,
+    args: [cuidId],
   });
 
   if (!oldTodo) {
@@ -127,12 +139,12 @@ app.post("/todos/toggle/:id", async (c) => {
   const newDirection = oldTodo.rows[0].completed === 0 ? 1 : 0;
 
   await db.execute({
-    sql: `UPDATE todos SET completed = ? WHERE id = ?`,
-    args: [newDirection, numberId],
+    sql: `UPDATE todosV2 SET completed = ? WHERE id = ?`,
+    args: [newDirection, cuidId],
   });
 
   const todo = zTodo.safeParse({
-    id: numberId,
+    id: cuidId,
     content: oldTodo.rows[0].content,
     completed: newDirection,
   });
@@ -146,9 +158,19 @@ app.post("/todos/toggle/:id", async (c) => {
 app.delete("/todos/:id", async (c) => {
   const db = c.get("db");
   const id = Number(c.req.param("id"));
+
+  const parseCuid = zCuid.safeParse(id);
+
+  if (!parseCuid.success) {
+    c.status(400);
+    return c.text("Invalid id", 401);
+  }
+
+  const cuidId = parseCuid.data;
+
   await db.execute({
-    sql: `DELETE FROM todos WHERE id = ?`,
-    args: [id],
+    sql: `DELETE FROM todosV2 WHERE id = ?`,
+    args: [cuidId],
   });
   return c.html(html`<div />`);
 });

@@ -16,7 +16,7 @@ export function TodoItem(todo: Todo) {
         <TodoCheckbox {...todo} />
         <div class="flex">
           <button
-            class="box-content flex items-center justify-center p-0.5 text-sm font-bold text-red-500 rounded-sm bg-red-50 aspect-square dark:bg-red-600 dark:text-red-100 border border-red-800 dark:border-red-300 box-border hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-700 dark:hover:text-red-50"
+            class="box-content flex items-center justify-center p-0.5 text-md font-bold text-red-500 rounded-sm bg-red-50 aspect-square dark:bg-red-600 dark:text-red-100 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-700 dark:hover:text-red-50"
             hx-delete={`/todos/${id}`}
             hx-swap="outerHTML"
             hx-target={`#${i}`}
