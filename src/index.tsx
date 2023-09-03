@@ -17,6 +17,10 @@ import { TodoCheckbox } from "./components/todo/todo-checkbox";
 import { init } from "@paralleldrive/cuid2";
 import { ConfigStore } from "fastly:config-store";
 import { env } from "fastly:env";
+import { validator } from "hono/validator";
+import { FormData } from "formdata-polyfill/esm.min.js";
+
+globalThis.FormData = FormData;
 
 // NOTE: we extend context to hono
 declare module "hono" {
@@ -90,28 +94,34 @@ app.get("/", async (c) => {
   );
 });
 
-app.post("/todos", cuidMiddleware, async (c) => {
-  const db = c.get("db");
-  const cuid2 = c.get("cuid2");
-  const formData = await getFormData(c.req);
+app.post(
+  "/todos",
+  cuidMiddleware,
+  validator("form", (value, c) => {
+    const content = value["content"];
+    const parsed = formSchema.safeParse({
+      content,
+    });
+    if (!parsed.success) {
+      return c.text("Invalid!", 401);
+    }
+    return parsed.data;
+  }),
+  async (c) => {
+    const db = c.get("db");
+    const cuid2 = c.get("cuid2");
 
-  const parsed = formSchema.safeParse({
-    content: formData.get("content"),
-  });
-  if (!parsed.success) {
-    return c.text("Invalid!", 401);
+    const { content } = c.req.valid("form");
+    const id = cuid2();
+
+    await db.execute({
+      sql: `INSERT INTO todosV2 (id, content) VALUES (?, ?)`,
+      args: [id, content],
+    });
+
+    return c.html(<TodoItem id={id} content={content} completed={0} />);
   }
-
-  const id = cuid2();
-  const content = parsed.data.content;
-
-  await db.execute({
-    sql: `INSERT INTO todosV2 (id, content) VALUES (?, ?)`,
-    args: [id, parsed.data.content],
-  });
-
-  return c.html(<TodoItem id={id} content={content} completed={0} />);
-});
+);
 
 app.post("/todos/toggle/:id", async (c) => {
   const db = c.get("db");

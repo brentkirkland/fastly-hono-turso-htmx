@@ -19,7 +19,7 @@
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "fastly": "^6.0.0",
     "formdata-polyfill": "^4.0.10",
-    "hono": "^3.5.0",
+    "hono": "^3.5.7",
     "zod": "^3.22.2"
   },
   "type": "module"

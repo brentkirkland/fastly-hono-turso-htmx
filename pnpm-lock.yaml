@@ -24,8 +24,8 @@ dependencies:
     specifier: ^4.0.10
     version: 4.0.10
   hono:
-    specifier: ^3.5.0
-    version: 3.5.4
+    specifier: ^3.5.7
+    version: 3.5.7
   zod:
     specifier: ^3.22.2
     version: 3.22.2
@@ -784,8 +784,8 @@ packages:
       function-bind: 1.1.1
     dev: false
 
-  /hono@3.5.4:
-    resolution: {integrity: sha512-GrRBIJhZ+tG+8RtoyPQjvqPGwppERmayyTiPKano4egmpkJf1XiptESUYK5vKHICNaJksAKB9jzy1CmOdQENPA==}
+  /hono@3.5.7:
+    resolution: {integrity: sha512-FKbkgLYpO9tQKkX5dzsmsUKDlat03LSjOjHfP7emsonKpj4bbr4ewWp7wiF8PnH4QUIM8r7XL+Zhrofe//zO6Q==}
     engines: {node: '>=16.0.0'}
     dev: false
 
