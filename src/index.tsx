@@ -2,16 +2,18 @@
 
 import { Hono } from "hono";
 import { html } from "hono/html";
+import { poweredBy } from "hono/powered-by";
+
 import type { Client } from "@libsql/client/web";
+
+import { FormData } from "formdata-polyfill/esm.min.js";
 
 import { BaseHtml } from "./components/layout/base";
 import { Body } from "./components/layout/body";
 import { TodoList } from "./components/todo/todo-list";
 import { TodoItem } from "./components/todo/todo-item";
-import { zTodo, zTodos } from "./zod";
-import { poweredBy } from "hono/powered-by";
 import { TodoCheckbox } from "./components/todo/todo-checkbox";
-import { FormData } from "formdata-polyfill/esm.min.js";
+import { zTodo, zTodos } from "./zod";
 import { cuidMiddleware, dbMiddleware, loggerMiddleware } from "./middleware";
 import { cuidValidator, formValidator } from "./validators";
 
