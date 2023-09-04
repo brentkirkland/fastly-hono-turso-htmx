@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const zCuid = z.string().cuid2();
+export const zCuid = z.string().min(10).max(10);
 
 export const zTodo = z.object({
   id: zCuid,
@@ -13,6 +13,6 @@ export const zTodos = z.array(zTodo);
 export type Todo = z.infer<typeof zTodo>;
 export type Todos = z.infer<typeof zTodos>;
 
-export const formSchema = z.object({
+export const zFormSchema = z.object({
   content: z.string(),
 });
