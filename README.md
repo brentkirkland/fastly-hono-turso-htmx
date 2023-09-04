@@ -4,6 +4,9 @@
 
 This is an example project how to build a serverless htmx UI that connects to a SQLite db.
 
+Check out the demo: https://www.surf.rodeo
+NOTE: This project is using Turso's free tier with replicas in Los Angeles, Virginia, and Chicago. If you are outside the US, you may witness some latency.
+
 ## Stack
 
 - Fastly's Compute@Edge
