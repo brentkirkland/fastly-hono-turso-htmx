@@ -8,6 +8,7 @@ export function TodoCheckbox({ completed, id }: Todo) {
       checked={!!completed}
       hx-post={`/todos/toggle/${id}`}
       hx-swap="outerHTML"
+      hx-indicator="#spinner"
     />
   );
 }

@@ -5,6 +5,7 @@ export function TodoForm() {
       hx-post="/todos"
       hx-swap="beforeend"
       hx-target="#todo-list"
+      hx-indicator="#spinner"
       _="on submit target.reset()"
     >
       <input
@@ -15,7 +16,7 @@ export function TodoForm() {
       />
       <button
         type="submit"
-        class="px-6 text-sm font-bold text-white bg-teal-500 rounded-sm dark:bg-teal-600 dark:text-teal-50 hover:bg-teal-600 dark:hover:bg-teal-700"
+        class="px-6 text-sm font-bold text-white bg-teal-500 rounded-sm dark:bg-teal-600 dark:text-teal-5g0 hover:bg-teal-600 dark:hover:bg-teal-700"
       >
         Add
       </button>

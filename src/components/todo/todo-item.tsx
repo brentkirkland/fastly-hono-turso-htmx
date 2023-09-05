@@ -20,6 +20,7 @@ export function TodoItem(todo: Todo) {
             hx-delete={`/todos/${id}`}
             hx-swap="outerHTML"
             hx-target={`#${i}`}
+            hx-indicator="#spinner"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
