@@ -1,4 +1,4 @@
-import { Todo } from "../../db/schema";
+import { Todo } from "../../drizzle/types";
 import { TodoCheckbox } from "./todo-checkbox";
 
 export function TodoItem(todo: Todo) {

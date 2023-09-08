@@ -14,8 +14,8 @@ import { TodoCheckbox } from "./components/todo/todo-checkbox";
 import { cuidMiddleware, dbMiddleware, loggerMiddleware } from "./middleware";
 import { cuidValidator, formValidator } from "./validators";
 import { DbClient } from "./db";
-import { schema } from "./db/schema";
 import { eq } from "drizzle-orm";
+import * as schema from "./drizzle/schema";
 
 globalThis.FormData = FormData;
 
@@ -89,7 +89,7 @@ app.post("/todos/toggle/:id", cuidValidator, async (c) => {
   const updatedTodos = await db
     .update(schema.todos)
     .set({
-      completed: !oldTodo.completed,
+      completed: oldTodo.completed ? 0 : 1,
     })
     .where(eq(schema.todos.id, id))
     .returning();

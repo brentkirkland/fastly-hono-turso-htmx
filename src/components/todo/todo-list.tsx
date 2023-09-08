@@ -1,4 +1,4 @@
-import { Todo } from "../../db/schema";
+import { Todo } from "../../drizzle/types";
 import { TodoForm } from "./todo-form";
 import { TodoItem } from "./todo-item";
 

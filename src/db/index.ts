@@ -1,6 +1,6 @@
 import { createClient } from "@libsql/client/web";
 import { drizzle } from "drizzle-orm/libsql";
-import { schema } from "./schema";
+import { todos } from "../drizzle/schema";
 
 const config = {
   fetch: async (req: Request) => {
@@ -30,6 +30,11 @@ export const createDb = ({
 }: {
   url: string;
   authToken: string;
-}) => drizzle(getClient({ url, authToken }), { schema });
+}) =>
+  drizzle(getClient({ url, authToken }), {
+    schema: {
+      todos,
+    },
+  });
 
 export type DbClient = ReturnType<typeof createDb>;
