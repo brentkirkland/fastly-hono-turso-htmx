@@ -1,4 +1,4 @@
-import { Todo } from "../../zod";
+import { Todo } from "../../db/schema";
 import { TodoCheckbox } from "./todo-checkbox";
 
 export function TodoItem(todo: Todo) {

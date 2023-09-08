@@ -1,4 +1,4 @@
-import { Todo } from "../../zod";
+import { Todo } from "../../db/schema";
 
 export function TodoCheckbox({ completed, id }: Todo) {
   return (

@@ -16,6 +16,7 @@
     "@fastly/js-compute": "^2.5.0",
     "@libsql/client": "^0.3.1",
     "@paralleldrive/cuid2": "^2.2.2",
+    "drizzle-orm": "0.28.3",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "fastly": "^6.0.0",
     "formdata-polyfill": "^4.0.10",

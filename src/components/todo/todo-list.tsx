@@ -1,8 +1,8 @@
-import { Todos } from "../../zod";
+import { Todo } from "../../db/schema";
 import { TodoForm } from "./todo-form";
 import { TodoItem } from "./todo-item";
 
-export function TodoList({ todos }: { todos: Todos }) {
+export function TodoList({ todos }: { todos: Todo[] }) {
   return (
     <div class="p-4">
       <header class="flex justify-between flex-1 pt-2 pb-4 border-b dark:border-b-gray-700">
