@@ -4,7 +4,8 @@
     "prebuild": "node ./build.mjs",
     "build": "js-compute-runtime bin/index.js bin/main.wasm",
     "deploy": "fastly compute publish",
-    "update": "fastly update"
+    "update": "fastly update",
+    "drizzle:introspect": "drizzle-kit introspect:sqlite"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
