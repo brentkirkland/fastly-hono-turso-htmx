@@ -1,7 +1,6 @@
 /// <reference types="@fastly/js-compute" />
 
 import { Hono } from "hono";
-import { html } from "hono/html";
 import { poweredBy } from "hono/powered-by";
 
 import { FormData } from "formdata-polyfill/esm.min.js";
@@ -109,7 +108,7 @@ app.delete("/todos/:id", cuidValidator, async (c) => {
 
   await db.delete(schema.todos).where(eq(schema.todos.id, id));
 
-  return c.html(html`<div />`);
+  return c.html(<div />);
 });
 
 app.fire();
